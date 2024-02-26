@@ -11,7 +11,7 @@ export const ToggleTheme = () => {
   
   return (
     <>
-      <Switch checked={!isLight} onCheckedChange={handleChangeTheme} />
+      <Switch className="data-[state=checked]:bg-green-500" checked={!isLight} onCheckedChange={handleChangeTheme} />
     </>
   )
 }
