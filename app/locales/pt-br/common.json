@@ -1,0 +1,5 @@
+{
+  "hello": "Olá mundo do i18n!",
+  "hi": "viajou legal hein",
+  "name": "Olá {name}"
+}

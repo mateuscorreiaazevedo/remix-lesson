@@ -10,18 +10,27 @@ import {
   Scripts,
   ScrollRestoration,
   json,
+  redirect,
   useLoaderData,
 } from "@remix-run/react";
 import { themeSessionResolver } from "./libs/theme.server";
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes";
 import clsx from "clsx";
+import { I18nProvider } from "./contexts/i18n-context";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { locale } = params
+
+  if(!locale) {
+    return redirect('/pt-br')
+  }
+  
   const { getTheme } = await themeSessionResolver(request)
   const theme = getTheme()
 
   return json({
-    theme
+    theme,
+    locale: locale ?? 'pt-br'
   })
 }
 
@@ -37,16 +46,17 @@ export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>()
 
   return (
-    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
-      <App />
-    </ThemeProvider>
+    <I18nProvider locale={data.locale}>
+      <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+        <App />
+      </ThemeProvider>
+    </I18nProvider>
   )
 }
 
 export function App() {
   const data = useLoaderData<typeof loader>()
   const [theme] = useTheme()
-
 
 
   return (
