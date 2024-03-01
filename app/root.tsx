@@ -15,13 +15,18 @@ import {
 import { themeSessionResolver } from "./libs/theme.server";
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes";
 import clsx from "clsx";
+import i18next from "./libs/i18n/index.server";
+import { useChangeLanguage } from "./hooks/use-change-language";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request)
+  const locale = await i18next.getLocale(request)
   const theme = getTheme()
 
   return json({
-    theme
+    theme,
+    locale
   })
 }
 
@@ -43,14 +48,19 @@ export default function AppWithProviders() {
   )
 }
 
+export const handle = {
+  i18n: 'common'
+}
+
 export function App() {
   const data = useLoaderData<typeof loader>()
+  const { i18n } = useTranslation()
   const [theme] = useTheme()
 
-
+  useChangeLanguage(data.locale)
 
   return (
-    <html lang="pt-br" className={clsx(theme)}>
+    <html lang={data.locale} dir={i18n.dir()} className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
