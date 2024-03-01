@@ -1,6 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import favicon from '../public/icon.svg'
-import styles from './styles/globals.css'
+import favicon from '~/assets/favicon/icon.svg'
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
@@ -19,6 +18,9 @@ import i18next from "./libs/i18n/index.server";
 import { useChangeLanguage } from "./hooks/use-change-language";
 import { useTranslation } from "react-i18next";
 
+import './styles/globals.css'
+
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request)
   const locale = await i18next.getLocale(request)
@@ -34,7 +36,6 @@ export const links: LinksFunction = () => [
   { rel: 'icon', href: favicon },
   { rel: 'preconnect', href: "https://fonts.googleapis.com" },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap' },
-  { rel: 'stylesheet', href: styles },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
@@ -71,8 +72,8 @@ export function App() {
       <body>
         <Outlet />
         <ScrollRestoration />
-        <Scripts />
         <LiveReload />
+        <Scripts />
       </body>
     </html>
   );

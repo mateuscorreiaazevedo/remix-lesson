@@ -1,4 +1,4 @@
 {
   "hello": "Olá",
-  "name": "Tudo bem {{name}}?"
+  "name": "Tudo bem, {{name}}?"
 }
